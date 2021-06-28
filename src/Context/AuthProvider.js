@@ -6,33 +6,37 @@ import { Spin } from "antd";
 export const AuthContext = React.createContext();
 
 export default function AuthProvider({ children }) {
-    const [user, setUser] = useState({});
-    const history = useHistory();
-    const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState({});
+  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
 
-    React.useEffect(() => {
-        const unsubscribed = auth.onAuthStateChanged((user) => {
-            console.log({ user });
-            if (user) {
-            const {displayName, email, uid, photoURL} = user;
-            setUser({
-                displayName, email, uid, photoURL
-            });
-            setIsLoading(false);
-            history.push("/");
-            }
-
-            history.push('/login');
+  React.useEffect(() => {
+    const unsubscribed = auth.onAuthStateChanged((user) => {
+      console.log({ user });
+      if (!user) {
+        const { displayName, email, uid, photoURL } = user;
+        setUser({
+          displayName,
+          email,
+          uid,
+          photoURL,
         });
-        
-        return () => {
-            unsubscribed();
-        }
-    }, [history])
+        setIsLoading(false);
+        history.push("/");
+        return;
+      }
 
-    return (
-        <AuthContext.Provider value={{ user }}>
-            {isLoading ? <Spin /> : children}
-        </AuthContext.Provider>
-    )
+      history.push("/login");
+    });
+
+    return () => {
+      unsubscribed();
+    };
+  }, [history]);
+
+  return (
+    <AuthContext.Provider value={{ user }}>
+      {isLoading ? <Spin /> : children}
+    </AuthContext.Provider>
+  );
 }
