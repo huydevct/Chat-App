@@ -2,6 +2,8 @@ import { Collapse, Typography, Button } from "antd";
 import React from "react";
 import styled from "styled-components";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import useFireStore from "../../hooks/useFireStore";
+import { AuthContext } from "../../Context/AuthProvider";
 
 const { Panel } = Collapse;
 
@@ -30,6 +32,17 @@ const LinkStyled = styled(Typography.Link)`
 `;
 
 export default function RoomList() {
+    const { user: { uid } } = React.useContext(AuthContext);
+
+    const roomsCondition = React.useMemo(() => {
+        return {
+            fieldName: 'members',
+        operator: 'array-contains',
+        compareValue: uid
+        }
+    }, [uid]);
+
+    const rooms = useFireStore('rooms', roomsCondition)
   return (
     <Collapse ghost defaultActiveKey={["1"]}>
       <PanelStyled header="Danh sách các phòng" key="1">

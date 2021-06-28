@@ -8,12 +8,12 @@ export const AuthContext = React.createContext();
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState({});
   const history = useHistory();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged((user) => {
       console.log({ user });
-      if (!user) {
+      if (user) {
         const { displayName, email, uid, photoURL } = user;
         setUser({
           displayName,
@@ -25,7 +25,7 @@ export default function AuthProvider({ children }) {
         history.push("/");
         return;
       }
-
+      setIsLoading(false);
       history.push("/login");
     });
 
