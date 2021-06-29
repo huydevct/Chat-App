@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { auth } from "../firebase/config";
-import { Spin } from "antd";
 import { AuthContext } from "./AuthProvider";
 import useFireStore from "../hooks/useFireStore";
 

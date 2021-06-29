@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Avatar, Typography } from "antd";
 import styled from "styled-components";
 
-import { auth, db } from "../../firebase/config";
+import { auth } from "../../firebase/config";
 import { AuthContext } from "../../Context/AuthProvider";
 
 const WrapperStyled = styled.div`
@@ -17,8 +17,6 @@ const WrapperStyled = styled.div`
   }
 `;
 export default function UserInfo() {
-  
-
   const {
     user: { displayName, photoURL },
   } = React.useContext(AuthContext);

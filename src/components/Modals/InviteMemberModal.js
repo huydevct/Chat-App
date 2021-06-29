@@ -15,7 +15,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
       setOptions([]);
       setFetching(true);
 
-      fetchOptions(value).then((newOptions) => {
+      fetchOptions(value, props.curMembers).then((newOptions) => {
         setOptions(newOptions);
         setFetching(false);
       });
@@ -42,7 +42,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
   );
 }
 
-async function fetchUserList(search) {
+async function fetchUserList(search, curMembers) {
   return db
     .collection("users")
     .where("keywords", "array-contains", search)
@@ -50,17 +50,21 @@ async function fetchUserList(search) {
     .limit(20)
     .get()
     .then((snapshot) => {
-        return snapshot.docs.map(doc => ({
-            label: doc.data().displayName,
-            value: doc.data().uid,
-            photoURL: doc.data().photoURL
-        }))
+      return snapshot.docs.map((doc) => ({
+        label: doc.data().displayName,
+        value: doc.data().uid,
+        photoURL: doc.data().photoURL,
+      })).filter(opt => !curMembers.includes(opt.value));
     });
 }
 
 export default function InviteMemberModal() {
-  const { isInviteMemberVisible, setIsInviteMemberVisible } =
-    useContext(AppContext);
+  const {
+    isInviteMemberVisible,
+    setIsInviteMemberVisible,
+    selectedRoomId,
+    selectedRoom,
+  } = useContext(AppContext);
   const {
     user: { uid },
   } = useContext(AuthContext);
@@ -68,14 +72,20 @@ export default function InviteMemberModal() {
   const [value, setValue] = useState("");
 
   const handleOk = () => {
-    addDocument("rooms", { ...form.getFieldValue(), members: [uid] });
-
     form.resetFields();
+    setValue([]);
+
+    const roomRef = db.collection('rooms').doc(selectedRoomId);
+
+    roomRef.update({
+      members: [...selectedRoom.members, ...value.map((val) => val.value)],
+    });
 
     setIsInviteMemberVisible(false);
   };
   const handleCancel = () => {
     form.resetFields();
+    setValue([]);
 
     setIsInviteMemberVisible(false);
   };
@@ -96,6 +106,7 @@ export default function InviteMemberModal() {
             fetchOptions={fetchUserList}
             onChange={(newValue) => setValue(newValue)}
             style={{ width: "100%" }}
+            curMembers={selectedRoom.members}
           />
         </Form>
       </Modal>
