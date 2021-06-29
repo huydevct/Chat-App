@@ -112,9 +112,9 @@ export default function ChatWindow() {
         <>
           <HeaderStyled>
             <div className="header__info">
-              <p className="header__title">{selectedRoom.name}</p>
+              <p className="header__title">{selectedRoom?.name}</p>
               <span className="header_description">
-                {selectedRoom.description}
+                {selectedRoom?.description}
               </span>
             </div>
             <ButtonGroupStyled>
