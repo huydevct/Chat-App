@@ -12,7 +12,6 @@ export default function AuthProvider({ children }) {
 
   React.useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged((user) => {
-      console.log({ user });
       if (user) {
         const { displayName, email, uid, photoURL } = user;
         setUser({

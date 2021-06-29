@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Form, Modal, Select, Spin, Avatar } from "antd";
 import { AppContext } from "../../Context/AppProvider";
-import { addDocument } from "../../firebase/service";
-import { AuthContext } from "../../Context/AuthProvider";
 import { debounce } from "lodash";
 import { db } from "../../firebase/config";
 
@@ -65,9 +63,7 @@ export default function InviteMemberModal() {
     selectedRoomId,
     selectedRoom,
   } = useContext(AppContext);
-  const {
-    user: { uid },
-  } = useContext(AuthContext);
+
   const [form] = Form.useForm();
   const [value, setValue] = useState("");
 

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Button, Tooltip, Avatar, Form, Input, Alert } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
@@ -104,7 +104,6 @@ export default function ChatWindow() {
   );
 
   const messages = useFireStore("messages", condition);
-  console.log({ messages });
 
   return (
     <WrapperStyled>
