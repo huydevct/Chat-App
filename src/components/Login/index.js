@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Button, Typography } from "antd";
 import firebase, { auth, db } from "../../firebase/config";
-import { addDocument } from "../../firebase/service";
+import { addDocument, generateKeywords } from "../../firebase/service";
 
 const { Title } = Typography;
 
@@ -18,7 +18,8 @@ export default function Login() {
         email: user.email,
         photoURL: user.photoURL,
         uid: user.uid,
-        providerId: additionalUserInfo.providerId
+        providerId: additionalUserInfo.providerId,
+        keywords: generateKeywords(user.displayName)
       });
     }
   };

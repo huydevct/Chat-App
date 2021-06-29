@@ -12,7 +12,7 @@ const useFireStore = (collection, condition) => {
           
         return;
       }
-      collectionRef.where(
+      collectionRef = collectionRef.where(
         condition.fieldName,
         condition.operator,
         condition.compareValue
